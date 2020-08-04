@@ -74,38 +74,135 @@ const SearchFondo = () => {
   console.log(state);
 
   return (
-    <>
-      <form onSubmit={handleSearchByName}>
+    <div className="container">
+      <form
+        onSubmit={handleSearchByName}
+        css={css`
+          display: grid;
+          grid-template-columns: 1fr;
+          grid-gap: 1rem;
+          font-size: 2rem;
+
+          input {
+            font-size: inherit;
+            border: 4px solid #cacaca;
+            transition: border-color 0.2s ease-in-out;
+            background-color: #cacaca;
+            padding: 0.5rem 1rem;
+            border-radius: 0.25rem;
+            outline: 0;
+          }
+
+          button {
+            font-size: inherit;
+            border: 4px solid #cacaca;
+            background-color: #ffffff;
+            padding: 0.5rem 1rem;
+            border-radius: 0.25rem;
+          }
+
+          input:focus {
+            border-color: #ffffff;
+          }
+        `}
+      >
         <label htmlFor="fondo">Nombre:</label>
-        <input type="text" name="fondo" id="fondo" />
+        <input type="text" autocomplete={false} name="fondo" id="fondo" />
         <button type="submit">Buscar</button>
       </form>
       <ul
         css={css`
           padding: 0;
           list-style-type: none;
+          border: 2px solid #ffffff;
+          border-radius: 0.25rem;
         `}
       >
         {fondos.map((fondo) => (
-          <li key={fondo.id}>
-            {fondo.nombre}
-            <button
-              data-id={fondo.id}
-              onClick={(e) => send({ type: "fetchClases", event: e })}
+          <li
+            key={fondo.id}
+            css={css`
+              padding: 0.5rem 1rem;
+              background-color: #cacaca;
+              border-bottom: 2px solid #ffffff;
+              color: #222222;
+            `}
+          >
+            <span
+              css={css`
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+              `}
             >
-              Buscar clases
-            </button>
+              {fondo.nombre}
+              <button
+                data-id={fondo.id}
+                onClick={(e) => send({ type: "fetchClases", event: e })}
+                css={css`
+                  background-color: #ffffff55;
+                  width: 40px;
+                  height: 40px;
+                  border-radius: 50%;
+                  border: 0;
+                  display: flex;
+                  align-items: center;
+                  justify-content: center;
+                `}
+              >
+                <span
+                  css={css`
+                    font-size: 2rem;
+                    margin-bottom: -0.5rem;
+                    pointer-events: none;
+                  `}
+                >
+                  &#9662;
+                </span>
+              </button>
+            </span>
             {clases[fondo.id] && (
-              <ul>
+              <ul
+                css={css`
+                  list-style-type: none;
+                  background-color: #ffffff55;
+                  border-radius: 0.2rem;
+                  margin: 1rem 0;
+                  padding: 0.5rem;
+                `}
+              >
                 {clases[fondo.id].map((clase) => (
-                  <li key={clase.id}>{clase.nombre}</li>
+                  <li
+                    key={clase.id}
+                    css={css`
+                      padding: 0.3rem 0;
+                      border-bottom: 1px solid #ffffff;
+                      display: flex;
+                      align-items: center;
+                      justify-content: space-between;
+                    `}
+                  >
+                    {clase.nombre}
+                    <button
+                      css={css`
+                        border-radius: 50%;
+                        padding: 0;
+                        height: 40px;
+                        width: 40px;
+                        background-color: #ffffff55;
+                        border: 0;
+                      `}
+                    >
+                      +
+                    </button>
+                  </li>
                 ))}
               </ul>
             )}
           </li>
         ))}
       </ul>
-    </>
+    </div>
   );
 };
 

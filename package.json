@@ -6,6 +6,7 @@
   "scripts": {
     "prod": "webpack src/index.js",
     "dev": "webpack-dev-server src/index.js",
+    "clean": "rm -rf dist/",
     "format": "prettier --write src"
   },
   "browserslist": [

@@ -23,12 +23,45 @@ const Layout = ({ children }) => {
             grid-template-rows: auto 1fr auto;
             min-height: 100vh;
           }
+
+          .container {
+            padding: 0 20px;
+            width: 900px;
+            max-width: 100vw;
+            margin: 0 auto;
+          }
         `}
       />
-      <header>CAFCI Calculator</header>
+      <header
+        css={css`
+          padding: 1rem 2rem;
+          display: flex;
+          align-items: center;
+        `}
+      >
+        <h5>CAFCI Calculator</h5>
+      </header>
       <main>{children}</main>
-      <footer>
-        <p>Made by @jenaroc</p>
+      <footer
+        css={css`
+          padding: 1rem 2rem;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+        `}
+      >
+        <p>
+          Made by{" "}
+          <a
+            href="https://twitter.com/JenaroC"
+            target="_blank"
+            css={css`
+              color: currentColor;
+            `}
+          >
+            @jenaroc
+          </a>
+        </p>
       </footer>
     </>
   );
