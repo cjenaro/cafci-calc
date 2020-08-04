@@ -61,7 +61,7 @@ const machine = createMachine(
   context
 );
 
-const SearchFondo = () => {
+const SearchFondo = ({ selectFondo }) => {
   const [current, send] = useMachine(machine);
   const state = current.name;
   const { fondos, clases } = current.context;
@@ -71,15 +71,13 @@ const SearchFondo = () => {
     send({ type: "fetch", event: e });
   };
 
-  console.log(state);
-
   return (
     <div className="container">
       <form
         onSubmit={handleSearchByName}
         css={css`
           display: grid;
-          grid-template-columns: 1fr;
+          grid-template-columns: 100%;
           grid-gap: 1rem;
           font-size: 2rem;
 
@@ -180,10 +178,16 @@ const SearchFondo = () => {
                       display: flex;
                       align-items: center;
                       justify-content: space-between;
+                      &:last-child {
+                        border-bottom: 0;
+                      }
                     `}
                   >
                     {clase.nombre}
                     <button
+                      onClick={() =>
+                        selectFondo({ ...fondo, clase: { ...clase } })
+                      }
                       css={css`
                         border-radius: 50%;
                         padding: 0;
