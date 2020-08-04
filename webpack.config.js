@@ -1,7 +1,7 @@
 var HtmlWebpackPlugin = require('html-webpack-plugin');
 var path = require('path');
 
-module.exports = {
+module.exports = () => ({
   entry: 'index.js',
   output: {
     path: path.resolve(__dirname, './dist'),
@@ -31,4 +31,4 @@ module.exports = {
       "react-dom": "preact/compat",
     },
   }
-};
+});

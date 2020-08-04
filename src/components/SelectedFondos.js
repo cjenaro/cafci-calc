@@ -3,6 +3,7 @@ import { css, jsx } from "@filbert-js/core";
 import { Fragment } from "preact";
 import { createMachine, reduce, state, transition } from "robot3";
 import { useMachine } from "preact-robot";
+import MinusButton from "./MinusButton";
 
 const context = () => ({});
 
@@ -64,26 +65,16 @@ const SelectedFondos = ({ fondos = [], removeFondo }) => {
             `}
           >
             <p>{fondo.clase.nombre}</p>
-            <button
-              onClick={() => removeFondo(fondo.id)}
-              css={css`
-                height: 40px;
-                width: 40px;
-                border: 0;
-                border-radius: 50%;
-                background-color: #ffffff55;
-              `}
-            >
-              -
-            </button>
+            <MinusButton onClick={() => removeFondo(fondo.id)} />
           </li>
         ))}
       </ul>
       <div
         css={css`
-          display: flex;
-          align-items: center;
+          display: grid;
+          grid-template-columns: 80% 20%;
           border-radius: 0 0 0.25em 0.25em;
+          height: 40px;
         `}
       >
         <button
@@ -94,14 +85,12 @@ const SelectedFondos = ({ fondos = [], removeFondo }) => {
             padding: 0.5em 1em;
             font-size: 1.5em;
             color: #222222;
-            width: 80%;
           `}
         >
           Comparar
         </button>
         <button
           css={css`
-            width: 20%;
             border-radius: 0 0 0.25em 0;
             background-color: #fafafa;
             padding: 0.25em 1em;

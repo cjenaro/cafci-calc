@@ -4,6 +4,9 @@ import { createMachine, invoke, reduce, state, transition } from "robot3";
 import { useMachine } from "preact-robot";
 import { useState } from "preact/hooks";
 import { css, jsx } from "@filbert-js/core";
+import { ENDPOINT_BASE } from "../utils/constants";
+import PlusButton from "./PlusButton";
+import DropdownButton from "./DropdownButton";
 
 const context = () => ({
   fondos: [],
@@ -13,15 +16,14 @@ const context = () => ({
 async function fetchFondo(_, { event }) {
   const nombre = event.target.fondo.value;
   return fetch(
-    `http://api.cafci.org.ar/fondo?limit=0&estado=1&nombre=${nombre}`
+    `${ENDPOINT_BASE}/fondo?limit=0&estado=1&nombre=${nombre}`
   ).then((blob) => blob.json());
 }
 
-async function fetchFondoById(_, { event }) {
-  const id = event.target.dataset.id;
+async function fetchFondoById(_, { id }) {
   return {
     data: await fetch(
-      `http://api.cafci.org.ar/fondo/${id}/clase?limit=0`
+      `${ENDPOINT_BASE}/fondo/${id}/clase?limit=0`
     ).then((blob) => blob.json()),
     id,
   };
@@ -134,30 +136,9 @@ const SearchFondo = ({ selectFondo }) => {
               `}
             >
               {fondo.nombre}
-              <button
-                data-id={fondo.id}
-                onClick={(e) => send({ type: "fetchClases", event: e })}
-                css={css`
-                  background-color: #ffffff55;
-                  width: 40px;
-                  height: 40px;
-                  border-radius: 50%;
-                  border: 0;
-                  display: flex;
-                  align-items: center;
-                  justify-content: center;
-                `}
-              >
-                <span
-                  css={css`
-                    font-size: 2rem;
-                    margin-bottom: -0.5rem;
-                    pointer-events: none;
-                  `}
-                >
-                  &#9662;
-                </span>
-              </button>
+              <DropdownButton
+                onClick={(e) => send({ type: "fetchClases", id: fondo.id })}
+              />
             </span>
             {clases[fondo.id] && (
               <ul
@@ -184,21 +165,11 @@ const SearchFondo = ({ selectFondo }) => {
                     `}
                   >
                     {clase.nombre}
-                    <button
+                    <PlusButton
                       onClick={() =>
                         selectFondo({ ...fondo, clase: { ...clase } })
                       }
-                      css={css`
-                        border-radius: 50%;
-                        padding: 0;
-                        height: 40px;
-                        width: 40px;
-                        background-color: #ffffff55;
-                        border: 0;
-                      `}
-                    >
-                      +
-                    </button>
+                    />
                   </li>
                 ))}
               </ul>
