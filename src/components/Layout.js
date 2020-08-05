@@ -2,7 +2,7 @@
 import { css, Global, jsx } from "@filbert-js/core";
 import { Fragment } from "preact";
 
-const Layout = ({ children }) => {
+const Layout = ({ children, goHome, currentState }) => {
   return (
     <>
       <Global
@@ -16,6 +16,10 @@ const Layout = ({ children }) => {
             background-color: #222222;
             color: #ffffff;
             font-family: sans-serif;
+          }
+
+          button {
+            cursor: pointer;
           }
 
           #app {
@@ -39,17 +43,40 @@ const Layout = ({ children }) => {
           align-items: center;
         `}
       >
-        <h5>CAFCI Calculator</h5>
+        {currentState !== "idle" && (
+          <button
+            css={css`
+              border: 0;
+              background-color: transparent;
+              font-size: 1.25rem;
+              color: currentColor;
+              margin-right: 1rem;
+              text-decoration: underline;
+            `}
+            onClick={goHome}
+          >
+            &larr; Atras
+          </button>
+        )}
+        <h5
+          css={css`
+            font-size: 1.25rem;
+          `}
+        >
+          Calculadora CAFCI
+        </h5>
       </header>
       <main>{children}</main>
       <footer
         css={css`
           padding: 1rem 2rem;
           display: flex;
+          flex-direction: column;
           align-items: center;
           justify-content: center;
         `}
       >
+        <p>Datos oficiales de CAFCI</p>
         <p>
           Made by{" "}
           <a

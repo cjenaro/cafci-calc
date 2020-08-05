@@ -4,6 +4,7 @@ import { Fragment } from "preact";
 import { createMachine, reduce, state, transition } from "robot3";
 import { useMachine } from "preact-robot";
 import MinusButton from "./MinusButton";
+import DropdownButton from "./DropdownButton";
 
 const context = () => ({});
 
@@ -15,7 +16,7 @@ const machine = createMachine(
   context
 );
 
-const SelectedFondos = ({ fondos = [], removeFondo }) => {
+const SelectedFondos = ({ fondos = [], removeFondo, compareFondos }) => {
   const [current, send] = useMachine(machine);
   const state = current.name;
   const closed = state === "closed";
@@ -86,31 +87,20 @@ const SelectedFondos = ({ fondos = [], removeFondo }) => {
             font-size: 1.5em;
             color: #222222;
           `}
+          onClick={compareFondos}
         >
           Comparar
         </button>
-        <button
+        <div
           css={css`
-            border-radius: 0 0 0.25em 0;
-            background-color: #fafafa;
-            padding: 0.25em 1em;
-            font-size: 1.5em;
-            border: 0;
-
-            span {
-              display: block;
-              transition: transform 0.2s ease-in-out;
-              transform: rotate(180deg);
-            }
-
-            span.downwards {
-              transform: rotate(0);
-            }
+            background-color: #fcfcfc;
+            display: flex;
+            align-items: center;
+            justify-content: center;
           `}
-          onClick={handleClick}
         >
-          <span className={!closed ? "upwards" : "downwards"}>&#9662;</span>
-        </button>
+          <DropdownButton upwards={!closed} onClick={handleClick} />
+        </div>
       </div>
     </div>
   );

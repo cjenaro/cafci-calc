@@ -1,7 +1,7 @@
 /** @jsx jsx */
 import { css, jsx } from "@filbert-js/core";
 
-const DropdownButton = ({ onClick }) => {
+const DropdownButton = ({ onClick, upwards }) => {
   return (
     <button
       aria-label="Add"
@@ -15,6 +15,11 @@ const DropdownButton = ({ onClick }) => {
         --stroke-color: #222222;
         --fill-color: #fafafa;
         --stroke-width: 4;
+
+        svg {
+          transition: transform 0.3s ease-in-out;
+          transform: rotate(${upwards ? "180deg" : "0deg"});
+        }
       `}
     >
       <svg id="emoji" viewBox="0 0 72 72" xmlns="http://www.w3.org/2000/svg">

@@ -1,6 +1,13 @@
 /** @jsx jsx */
 import { Fragment } from "preact";
-import { createMachine, invoke, reduce, state, transition } from "robot3";
+import {
+  createMachine,
+  invoke,
+  immediate,
+  reduce,
+  state,
+  transition,
+} from "robot3";
 import { useMachine } from "preact-robot";
 import { useState } from "preact/hooks";
 import { css, jsx } from "@filbert-js/core";
@@ -11,7 +18,15 @@ import DropdownButton from "./DropdownButton";
 const context = () => ({
   fondos: [],
   clases: [],
+  hiddenClases: {},
 });
+
+function toggleHideClass(ctx, { id }) {
+  return {
+    ...ctx,
+    hiddenClases: { ...ctx.hiddenClases, [id]: !ctx.hiddenClases[id] },
+  };
+}
 
 async function fetchFondo(_, { event }) {
   const nombre = event.target.fondo.value;
@@ -55,9 +70,11 @@ const machine = createMachine(
         })
       )
     ),
+    input: state(immediate("loaded")),
     loaded: state(
       transition("fetchClases", "loadingClases"),
-      transition("fetch", "loading")
+      transition("fetch", "loading"),
+      transition("toggleHideClases", "input", reduce(toggleHideClass))
     ),
   },
   context
@@ -66,11 +83,20 @@ const machine = createMachine(
 const SearchFondo = ({ selectFondo }) => {
   const [current, send] = useMachine(machine);
   const state = current.name;
-  const { fondos, clases } = current.context;
+  const { fondos, clases, hiddenClases } = current.context;
 
   const handleSearchByName = async (e) => {
     e.preventDefault();
     send({ type: "fetch", event: e });
+  };
+
+  const handleFetchClases = (id) => {
+    const wasFetched = !!clases[id];
+    if (wasFetched) {
+      send({ type: "toggleHideClases", id });
+    } else {
+      send({ type: "fetchClases", id });
+    }
   };
 
   return (
@@ -137,10 +163,11 @@ const SearchFondo = ({ selectFondo }) => {
             >
               {fondo.nombre}
               <DropdownButton
-                onClick={(e) => send({ type: "fetchClases", id: fondo.id })}
+                upwards={!hiddenClases[fondo.id] && !!clases[fondo.id]}
+                onClick={() => handleFetchClases(fondo.id)}
               />
             </span>
-            {clases[fondo.id] && (
+            {!hiddenClases[fondo.id] && clases[fondo.id] && (
               <ul
                 css={css`
                   list-style-type: none;
