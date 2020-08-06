@@ -12,6 +12,7 @@ import { useMachine } from "preact-robot";
 import { useState } from "preact/hooks";
 import { css, jsx } from "@filbert-js/core";
 import { ENDPOINT_BASE } from "../utils/constants";
+import { fetchFondo, fetchFondoById as fetchById } from "../utils/api";
 import PlusButton from "./PlusButton";
 import DropdownButton from "./DropdownButton";
 
@@ -28,18 +29,9 @@ function toggleHideClass(ctx, { id }) {
   };
 }
 
-async function fetchFondo(_, { event }) {
-  const nombre = event.target.fondo.value;
-  return fetch(
-    `${ENDPOINT_BASE}/fondo?limit=0&estado=1&nombre=${nombre}`
-  ).then((blob) => blob.json());
-}
-
 async function fetchFondoById(_, { id }) {
   return {
-    data: await fetch(
-      `${ENDPOINT_BASE}/fondo/${id}/clase?limit=0`
-    ).then((blob) => blob.json()),
+    data: await fetchById({ id }),
     id,
   };
 }
@@ -48,7 +40,7 @@ const machine = createMachine(
   {
     idle: state(transition("fetch", "loading")),
     loading: invoke(
-      fetchFondo,
+      (_, { name }) => fetchFondo({ name }),
       transition(
         "done",
         "loaded",
@@ -87,7 +79,7 @@ const SearchFondo = ({ selectFondo }) => {
 
   const handleSearchByName = async (e) => {
     e.preventDefault();
-    send({ type: "fetch", event: e });
+    send({ type: "fetch", name: e.target.fondo.value });
   };
 
   const handleFetchClases = (id) => {
