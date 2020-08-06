@@ -110,25 +110,40 @@ const SearchFondo = ({ selectFondo }) => {
           font-size: 2rem;
 
           input {
+            --border-color: var(--theme-ash);
             font-size: inherit;
-            border: 4px solid #cacaca;
+            border: 4px solid var(--border-color);
             transition: border-color 0.2s ease-in-out;
-            background-color: #cacaca;
+            background-color: var(--theme-green);
             padding: 0.5rem 1rem;
             border-radius: 0.25rem;
             outline: 0;
           }
 
           button {
+            --border-color: var(--theme-ash);
             font-size: inherit;
-            border: 4px solid #cacaca;
-            background-color: #ffffff;
+            border: 4px solid var(--border-color);
+            background-color: var(--theme-ash);
+            color: var(--theme-green);
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 0.2rem;
             padding: 0.5rem 1rem;
             border-radius: 0.25rem;
+            transition: border-color 0.2s ease-in-out;
+          }
+
+          button:hover {
+            --border-color: var(--theme-ash--darker);
+          }
+
+          button:active {
+            --border-color: var(--theme-ash--darkest);
           }
 
           input:focus {
-            border-color: #ffffff;
+            --border-color: var(--theme-ash--darker);
           }
         `}
       >
@@ -140,7 +155,7 @@ const SearchFondo = ({ selectFondo }) => {
         css={css`
           padding: 0;
           list-style-type: none;
-          border: 2px solid #ffffff;
+          border: 2px solid var(--theme-ash);
           border-radius: 0.25rem;
         `}
       >
@@ -149,8 +164,8 @@ const SearchFondo = ({ selectFondo }) => {
             key={fondo.id}
             css={css`
               padding: 0.5rem 1rem;
-              background-color: #cacaca;
-              border-bottom: 2px solid #ffffff;
+              background-color: var(--theme-green);
+              border-bottom: 2px solid var(--theme-ash);
               color: #222222;
             `}
           >
@@ -171,7 +186,7 @@ const SearchFondo = ({ selectFondo }) => {
               <ul
                 css={css`
                   list-style-type: none;
-                  background-color: #ffffff55;
+                  background-color: var(--theme-green--darker);
                   border-radius: 0.2rem;
                   margin: 1rem 0;
                   padding: 0.5rem;
@@ -182,7 +197,7 @@ const SearchFondo = ({ selectFondo }) => {
                     key={clase.id}
                     css={css`
                       padding: 0.3rem 0;
-                      border-bottom: 1px solid #ffffff;
+                      border-bottom: 1px solid var(--theme-ash--darker);
                       display: flex;
                       align-items: center;
                       justify-content: space-between;

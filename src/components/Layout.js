@@ -10,10 +10,18 @@ const Layout = ({ children, goHome, currentState }) => {
           @import url('https://fonts.googleapis.com/css2?family=Capriola&display=swap');
 
           :root {
-            --theme-green: #80bca3;
-            --theme-ash: #655643;
-            --theme-orange: #bf4d28;
-            --theme-golden: #e6ac27;
+            --theme-green: hsl(155, 30%, 61%);
+            --theme-green--darker: hsl(155, 30%, 41%);
+            --theme-green--darkest: hsl(155, 30%, 21%);
+            --theme-ash: hsl(33, 20%, 32%);
+            --theme-ash--darker: hsl(33, 20%, 22%);
+            --theme-ash--darkest: hsl(33, 20%, 12%);
+            --theme-orange: hsl(14, 65%, 45%);
+            --theme-orange--darker: hsl(14, 65%, 35%);
+            --theme-orange--darkest: hsl(14, 65%, 25%);
+            --theme-golden: hsl(41, 79%, 52%);
+            --theme-golden--darker: hsl(41, 79%, 32%);
+            --theme-golden--darkest: hsl(41, 79%, 12%);
           }
 
           * {
@@ -22,8 +30,8 @@ const Layout = ({ children, goHome, currentState }) => {
 
           body {
             margin: 0;
-            background-color: #222222;
-            color: #ffffff;
+            background-color: var(--theme-green);
+            color: #000000;
             font-family: Capriola, sans-serif;
           }
 
@@ -50,6 +58,9 @@ const Layout = ({ children, goHome, currentState }) => {
           padding: 1rem 2rem;
           display: flex;
           align-items: center;
+          margin-bottom: 1rem;
+          background-color: var(--theme-green--darkest);
+          color: var(--theme-green);
         `}
       >
         {currentState !== "idle" && (
@@ -70,6 +81,7 @@ const Layout = ({ children, goHome, currentState }) => {
         <h5
           css={css`
             font-size: 1.25rem;
+            margin: 0;
           `}
         >
           Calculadora CAFCI

@@ -13,7 +13,7 @@ const PlusButton = ({ onClick }) => {
         border-radius: 50%;
         border: 0;
         --stroke-color: #222222;
-        --fill-color: #fafafa;
+        --fill-color: var(--theme-green--darkest);
       `}
     >
       <svg id="emoji" viewBox="0 0 72 72" xmlns="http://www.w3.org/2000/svg">
