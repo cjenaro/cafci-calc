@@ -27,6 +27,8 @@
     "@filbert-js/core": "^0.0.8",
     "preact": "^10.4.6",
     "preact-robot": "^0.2.3",
-    "robot3": "^0.2.18"
+    "robot3": "^0.2.18",
+    "react": "npm:@preact/compat@0.0.3",
+    "react-dom": "npm:@preact/compat@0.0.3"
   }
 }

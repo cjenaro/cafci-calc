@@ -7,6 +7,15 @@ const Layout = ({ children, goHome, currentState }) => {
     <>
       <Global
         styles={`
+          @import url('https://fonts.googleapis.com/css2?family=Capriola&display=swap');
+
+          :root {
+            --theme-green: #80bca3;
+            --theme-ash: #655643;
+            --theme-orange: #bf4d28;
+            --theme-golden: #e6ac27;
+          }
+
           * {
             box-sizing: border-box;
           }
@@ -15,7 +24,7 @@ const Layout = ({ children, goHome, currentState }) => {
             margin: 0;
             background-color: #222222;
             color: #ffffff;
-            font-family: sans-serif;
+            font-family: Capriola, sans-serif;
           }
 
           button {
