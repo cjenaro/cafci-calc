@@ -22,14 +22,18 @@ const context = () => ({
 function addFondo(ctx, { fondo }) {
   return {
     ...ctx,
-    selectedFondos: [...ctx.selectedFondos, fondo],
+    selectedFondos: [
+      ...ctx.selectedFondos.filter((f) => f.id !== fondo.id),
+      fondo,
+    ],
   };
 }
 
-function setRendimiento(ctx, data) {
+function setRendimiento(ctx, { data }) {
+        const rendimientos = data.reduce((acc, { idFondo, data: { desde, hasta }}) => ({ ...acc, [`${idFondo}-${data.desde.fecha}-${data.hasta.fecha}`]: { ...data }}), {})
   return {
     ...ctx,
-    rendimientos: { ...data },
+    rendimientos,
   };
 }
 
@@ -40,15 +44,24 @@ function removeFondoById(ctx, { id }) {
   };
 }
 
-async function fetchAllRendimientos(ctx, { data: { from, to } }) {
-  const promises = ctx.selectedFondos.map((fondo) => {
-    return fetchRendimiento({
-      idFondo: fondo.id,
-      idClase: fondo.clase.id,
-      from,
-      to,
-    });
+async function fetchAllRendimientos(ctx, { data }) {
+  const objects = ctx.selectedFondos.reduce(
+    (acc, fondo) => [
+      ...acc,
+      ...data.map((period) => ({
+        idFondo: fondo.id,
+        idClase: fondo.clase.id,
+        from: period.from,
+        to: period.to,
+      })),
+    ],
+    []
+  );
+
+  const promises = objects.map((obj) => {
+    return fetchRendimiento(obj).then((r) => ({ ...r, idFondo: obj.idFondo }));
   });
+
   return Promise.all(promises);
 }
 
@@ -83,9 +96,8 @@ const App = () => {
     send({ type: "select", fondo });
   };
 
-  const compareFondos = ({ from, to }) => {
-    console.log(from, to);
-    send({ type: "select-date", data: { from, to } });
+  const compareFondos = (periods) => {
+    send({ type: "select-date", data: periods });
   };
 
   const goHome = () => send("resume");

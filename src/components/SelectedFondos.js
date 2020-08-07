@@ -1,6 +1,7 @@
 /** @jsx jsx */
 import { css, jsx, keyframes } from "@filbert-js/core";
 import { Fragment } from "preact";
+import { useState } from "preact/hooks";
 import { createMachine, reduce, state, transition } from "robot3";
 import { useMachine } from "preact-robot";
 import MinusButton from "./MinusButton";
@@ -24,6 +25,7 @@ const machine = createMachine(
 
 const SelectedFondos = ({ fondos = [], removeFondo, compareFondos }) => {
   const [current, send] = useMachine(machine);
+  const [periods, setPeriods] = useState(1);
   const state = current.name;
   const closed = state === "closed";
 
@@ -33,8 +35,21 @@ const SelectedFondos = ({ fondos = [], removeFondo, compareFondos }) => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    const { from, to } = e.target;
-    compareFondos({ from: from.value, to: to.value });
+    const periodsArr = Array.from({ length: periods }).map((_, i) => ({
+      from: e.target[`from_${i}`].value,
+      to: e.target[`to_${i}`].value,
+    }));
+    compareFondos(periodsArr);
+  };
+
+  const addPeriod = () => {
+    setPeriods(periods + 1);
+  };
+
+  const removePeriod = () => {
+    if (periods > 0) {
+      setPeriods(periods - 1);
+    }
   };
 
   return (
@@ -66,6 +81,7 @@ const SelectedFondos = ({ fondos = [], removeFondo, compareFondos }) => {
           grid-template-rows: 1fr 1fr auto;
           width: 100%;
           height: 100%;
+          overflow: scroll;
           position: fixed;
           top: 0;
           transform: translateX(${closed ? "100%" : "0"});
@@ -77,7 +93,7 @@ const SelectedFondos = ({ fondos = [], removeFondo, compareFondos }) => {
         <ul
           css={css`
             list-style-type: none;
-            margin: 0;
+            margin: 0 0 2rem;
             padding: 0;
           `}
         >
@@ -104,8 +120,9 @@ const SelectedFondos = ({ fondos = [], removeFondo, compareFondos }) => {
             onSubmit={handleSubmit}
             css={css`
               display: grid;
-              grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+              grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
               grid-gap: 1rem;
+              margin-bottom: 2rem;
 
               label {
                 display: flex;
@@ -117,24 +134,46 @@ const SelectedFondos = ({ fondos = [], removeFondo, compareFondos }) => {
                   padding: 1rem;
                 }
               }
-
-              button {
-                padding: 0.5rem 1rem;
-                border: 1px solid #fafafa;
-                font-weight: bold;
-                font-size: 1.5rem;
-                grid-column: -1/1;
-              }
             `}
           >
-            <label htmlFor="date_from">
-              Desde:
-              <input id="date_from" name="from" type="date" />
-            </label>
-            <label htmlFor="date_to">
-              Hasta:
-              <input id="date_to" name="to" type="date" />
-            </label>
+            {Array.from({ length: periods }).map((_, i) => (
+              <>
+                <label htmlFor={`date_from_${i}`}>
+                  Desde:
+                  <input id={`date_from_${i}`} name={`from_${i}`} type="date" />
+                </label>
+                <label htmlFor={`date_to_${i}`}>
+                  Hasta:
+                  <input id={`date_to_${i}`} name={`to_${i}`} type="date" />
+                </label>
+              </>
+            ))}
+            <button
+              type="button"
+              onClick={addPeriod}
+              css={css`
+                border: 2px solid var(--theme-ash--darkest);
+                color: var(--theme-ash--darkest);
+                background-color: transparent;
+                padding: 0.5em 1em;
+                border-radius: 5px;
+              `}
+            >
+              Quitar Periodo
+            </button>
+            <button
+              type="button"
+              onClick={addPeriod}
+              css={css`
+                border: 2px solid var(--theme-orange--darkest);
+                color: var(--theme-ash--darkest);
+                background-color: transparent;
+                padding: 0.5em 1em;
+                border-radius: 5px;
+              `}
+            >
+              Agregar Periodo
+            </button>
             <button
               css={css`
                 border: 0;
@@ -142,6 +181,7 @@ const SelectedFondos = ({ fondos = [], removeFondo, compareFondos }) => {
                 padding: 0.5em 1em;
                 font-size: 1.5em;
                 color: #222222;
+                grid-column: -1/1;
               `}
               type="submit"
             >
