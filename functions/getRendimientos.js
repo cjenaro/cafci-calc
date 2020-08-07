@@ -1,4 +1,4 @@
-exports.default = async (event, context) => {
+exports.handler = async (event, context) => {
   console.log(ctx, event)
   return {
     statusCode: 200;
