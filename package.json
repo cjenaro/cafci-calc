@@ -5,6 +5,7 @@
   "license": "MIT",
   "scripts": {
     "prod": "webpack --mode=production src/index.js",
+    "build": "yarn prod",
     "dev": "webpack-dev-server --host 0.0.0.0 src/index.js",
     "clean": "rm -rf dist/",
     "format": "prettier --write src"

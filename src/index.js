@@ -30,7 +30,24 @@ function addFondo(ctx, { fondo }) {
 }
 
 function setRendimiento(ctx, { data }) {
-        const rendimientos = data.reduce((acc, { idFondo, data: { desde, hasta }}) => ({ ...acc, [`${idFondo}-${data.desde.fecha}-${data.hasta.fecha}`]: { ...data }}), {})
+  const rendimientos = data.reduce((acc, current) => {
+    const { idFondo, data: currentData } = current;
+    return {
+      ...acc,
+      [`${currentData.desde.fecha}-${currentData.hasta.fecha}`]: {
+        ...acc[`${currentData.desde.fecha}-${currentData.hasta.fecha}`],
+        [idFondo]: {
+          desde: currentData.desde.valor,
+          hasta: currentData.hasta.valor,
+          directo: currentData.directo,
+          rendimiento: currentData.rendimiento,
+          tna: currentData.tna,
+        },
+        desde: currentData.desde.fecha,
+        hasta: currentData.hasta.fecha,
+      },
+    };
+  }, {});
   return {
     ...ctx,
     rendimientos,
@@ -101,6 +118,8 @@ const App = () => {
   };
 
   const goHome = () => send("resume");
+
+  console.log(state);
 
   return (
     <>

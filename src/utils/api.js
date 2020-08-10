@@ -19,3 +19,15 @@ export async function fetchFondoById({ id }) {
     .then((blob) => blob.json())
     .catch((err) => console.error(err));
 }
+
+export async function fetchCurrencies() {
+  return await fetch(`${ENDPOINT_BASE}/moneda?limit=0`)
+    .then((blob) => blob.json())
+    .catch((err) => console.error(err));
+}
+
+export async function fetchDetailedFondo({ idFondo, idClase }) {
+  return await fetch(`${ENDPOINT_BASE}/fondo/${idFondo}/clase/${idClase}/ficha`)
+    .then((blob) => blob.json())
+    .catch((err) => console.error(err));
+}

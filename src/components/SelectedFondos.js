@@ -122,7 +122,8 @@ const SelectedFondos = ({ fondos = [], removeFondo, compareFondos }) => {
               display: grid;
               grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
               grid-gap: 1rem;
-              margin-bottom: 2rem;
+              margin: 0 auto 2rem;
+              max-width: calc(400px + 1rem);
 
               label {
                 display: flex;
