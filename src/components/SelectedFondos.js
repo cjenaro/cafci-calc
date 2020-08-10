@@ -151,7 +151,7 @@ const SelectedFondos = ({ fondos = [], removeFondo, compareFondos }) => {
             ))}
             <button
               type="button"
-              onClick={addPeriod}
+              onClick={removePeriod}
               css={css`
                 border: 2px solid var(--theme-ash--darkest);
                 color: var(--theme-ash--darkest);

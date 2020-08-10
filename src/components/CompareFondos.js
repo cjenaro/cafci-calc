@@ -1,10 +1,8 @@
 /** @jsx jsx */
-import { useState, useEffect } from "preact/hooks";
 import { css, jsx } from "@filbert-js/core";
+import { fetchDetailedFondo } from "../utils/api";
 
 const CompareFondos = ({ rendimientos, fondos }) => {
-  const [detailedFondos, setDetailedFondos] = useState([]);
-
   return (
     <div className="container">
       <table
@@ -35,7 +33,7 @@ const CompareFondos = ({ rendimientos, fondos }) => {
             <th id="blank">&nbsp;</th>
             <th
               css={css`
-                text-align: center;
+                text-align: center !important;
               `}
               colspan={Object.keys(rendimientos).length}
             >
@@ -54,6 +52,9 @@ const CompareFondos = ({ rendimientos, fondos }) => {
                 </th>
               );
             })}
+            <th>Sector</th>
+            <th>Moneda</th>
+            <th>Rescate</th>
           </tr>
         </thead>
         <tbody>
@@ -62,8 +63,16 @@ const CompareFondos = ({ rendimientos, fondos }) => {
               <td>{fondo.nombre}</td>
               {Object.keys(rendimientos).map((key) => {
                 const rendimiento = rendimientos[key][fondo.id];
-                return <td>{rendimiento && rendimiento.tna}</td>;
+                return (
+                  <td>{rendimiento && Math.floor(Number(rendimiento.tna))}%</td>
+                );
               })}
+              <td>{fondo.tipoRentaId}</td>
+              <td>{fondo.monedaId}</td>
+              <td>
+                {fondo.diasLiquidacion &&
+                  `${Number(fondo.diasLiquidacion) * 24} hrs`}
+              </td>
             </tr>
           ))}
         </tbody>
