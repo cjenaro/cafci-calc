@@ -97,12 +97,25 @@ const Layout = ({ children, goHome, currentState }) => {
           justify-content: center;
         `}
       >
-        <p>Datos oficiales de CAFCI</p>
+        <p>
+          Datos oficiales de{" "}
+          <a
+            href="https://cafci.org.ar"
+            target="_blank"
+            rel="noopener noreferrer"
+            css={css`
+              color: currentColor;
+            `}
+          >
+            CAFCI
+          </a>
+        </p>
         <p>
           Made by{" "}
           <a
             href="https://twitter.com/JenaroC"
             target="_blank"
+            rel="noopener noreferrer"
             css={css`
               color: currentColor;
             `}

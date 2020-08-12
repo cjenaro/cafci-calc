@@ -15,6 +15,7 @@ import { ENDPOINT_BASE } from "../utils/constants";
 import { fetchFondo, fetchFondoById as fetchById } from "../utils/api";
 import PlusButton from "./PlusButton";
 import DropdownButton from "./DropdownButton";
+import Spinner from "./Spinner";
 
 const context = () => ({
   fondos: [],
@@ -141,7 +142,9 @@ const SearchFondo = ({ selectFondo }) => {
       >
         <label htmlFor="fondo">Nombre:</label>
         <input type="text" autocomplete={false} name="fondo" id="fondo" />
-        <button type="submit">Buscar</button>
+        <button disabled={state === "loading"} type="submit">
+          Buscar
+        </button>
       </form>
       <ul
         css={css`
@@ -169,10 +172,14 @@ const SearchFondo = ({ selectFondo }) => {
               `}
             >
               {fondo.nombre}
-              <DropdownButton
-                upwards={!hiddenClases[fondo.id] && !!clases[fondo.id]}
-                onClick={() => handleFetchClases(fondo.id)}
-              />
+              {state === "loadingClases" ? (
+                <Spinner />
+              ) : (
+                <DropdownButton
+                  upwards={!hiddenClases[fondo.id] && !!clases[fondo.id]}
+                  onClick={() => handleFetchClases(fondo.id)}
+                />
+              )}
             </span>
             {!hiddenClases[fondo.id] && clases[fondo.id] && (
               <ul

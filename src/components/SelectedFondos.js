@@ -79,7 +79,12 @@ const SelectedFondos = ({ fondos = [], removeFondo, compareFondos }) => {
           position: fixed;
           z-index: 3;
           border-radius: 2rem 0 0 2rem;
-          border: 1px solid var(--theme-green);
+          border: 0;
+          background-color: var(--theme-green--darker);
+          color: #ffffff;
+          display: flex;
+          align-items: center;
+          justify-content: center;
           box-shadow: 0px 0px 5px var(--theme-green-darkest);
           padding: 0.5em 2em 0.5em 0.5em;
           font-size: 1.25rem;
