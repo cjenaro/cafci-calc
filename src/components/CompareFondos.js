@@ -1,9 +1,10 @@
 /** @jsx jsx */
 import { css, jsx } from "@filbert-js/core";
 import { fetchCurrencies, fetchTypes } from "../utils/api";
-import { useState, useEffect } from "preact/hooks";
+import { useState, useEffect, useRef } from "preact/hooks";
 
 const CompareFondos = ({ rendimientos, fondos }) => {
+  const tableRef = useRef();
   const [currencies, setCurrencies] = useState(null);
   const [types, setTypes] = useState(null);
 
@@ -29,17 +30,47 @@ const CompareFondos = ({ rendimientos, fondos }) => {
     fetchTypes().then(shapeTypes);
   }, []);
 
+  const handleExport = () => {
+    const head = tableRef.current.querySelector("thead");
+    const headRows = Array.from(head.querySelectorAll("tr"));
+    const headCSV = headRows
+      .map((row) =>
+        Array.from(row.querySelectorAll("th"))
+          .map((cell) => cell.innerText)
+          .join(", ")
+      )
+      .join("\n");
+    const body = tableRef.current.querySelector("tbody");
+    const bodyRows = Array.from(body.querySelectorAll("tr"));
+    const bodyCSV = bodyRows
+      .map((row) =>
+        Array.from(row.querySelectorAll("td"))
+          .map((cell) => cell.innerText)
+          .join(", ")
+      )
+      .join("\n");
+
+    const href = `data:application/vnd.ms-excel, ${headCSV}\n${bodyCSV}`;
+    const a = document.createElement("a");
+    a.href = href;
+    a.download = "CAFCICALC.csv";
+    a.click();
+  };
+
   return (
     <div className="container">
       <div
         css={css`
           width: 100%;
           overflow: scroll;
-          box-shadow: inset -9px 0 9px -9px rgba(0, 0, 0, 0.4);
+          @media (max-width: 430px) {
+            box-shadow: inset -9px 0 9px -9px rgba(0, 0, 0, 0.4);
+          }
         `}
       >
         {currencies && types && (
           <table
+            ref={tableRef}
             css={css`
               border-collapse: collapse;
 
@@ -112,6 +143,21 @@ const CompareFondos = ({ rendimientos, fondos }) => {
             </tbody>
           </table>
         )}
+        <button
+          onClick={handleExport}
+          css={css`
+            padding: 0.5rem 1rem;
+            background-color: var(--theme-green--darkest);
+            color: #ffffff;
+            border: 0;
+            text-transform: uppercase;
+            letter-spacing: 0.25rem;
+            font-weight: bold;
+            margin-top: 1rem;
+          `}
+        >
+          Exportar a un CSV (Compatible con excel)
+        </button>
       </div>
     </div>
   );
