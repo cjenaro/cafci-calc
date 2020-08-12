@@ -26,6 +26,7 @@ const machine = createMachine(
 const SelectedFondos = ({ fondos = [], removeFondo, compareFondos }) => {
   const [current, send] = useMachine(machine);
   const [periods, setPeriods] = useState(1);
+  const [selectedDates, setSelectedDates] = useState({});
   const state = current.name;
   const closed = state === "closed";
 
@@ -50,6 +51,23 @@ const SelectedFondos = ({ fondos = [], removeFondo, compareFondos }) => {
     if (periods > 0) {
       setPeriods(periods - 1);
     }
+  };
+
+  const mask = (e) => {
+    const { name, value } = e.target;
+    let newValue = value.replace(/[^\d]/g, "");
+    let parsedValue = "";
+    parsedValue = `${newValue.slice(0, 2)}`;
+    if (newValue.length > 2) {
+      parsedValue += `-${newValue.slice(2, 4)}`;
+    }
+    if (newValue.length > 4) {
+      parsedValue += `-${newValue.slice(4, 8)}`;
+    }
+    setSelectedDates({
+      ...selectedDates,
+      [name]: parsedValue,
+    });
   };
 
   return (
@@ -128,25 +146,37 @@ const SelectedFondos = ({ fondos = [], removeFondo, compareFondos }) => {
               label {
                 display: flex;
                 flex-direction: column;
+              }
 
-                input {
-                  margin-top: 10px;
-                  border-radius: 5px;
-                  padding: 1rem;
-                }
+              input {
+                margin-top: 10px;
+                border-radius: 5px;
+                padding: 1rem;
               }
             `}
           >
+            <label id="desde">Desde:</label>
+            <label id="hasta">Hasta:</label>
             {Array.from({ length: periods }).map((_, i) => (
               <>
-                <label htmlFor={`date_from_${i}`}>
-                  Desde:
-                  <input id={`date_from_${i}`} name={`from_${i}`} type="date" />
-                </label>
-                <label htmlFor={`date_to_${i}`}>
-                  Hasta:
-                  <input id={`date_to_${i}`} name={`to_${i}`} type="date" />
-                </label>
+                <input
+                  placeholder="DD-MM-AAAA"
+                  aria-labelledby="desde"
+                  id={`date_from_${i}`}
+                  name={`from_${i}`}
+                  type="text"
+                  onChange={mask}
+                  value={selectedDates[`from_${i}`] || ""}
+                />
+                <input
+                  placeholder="DD-MM-AAAA"
+                  aria-labelledby="hasta"
+                  id={`date_to_${i}`}
+                  name={`to_${i}`}
+                  type="text"
+                  onChange={mask}
+                  value={selectedDates[`to_${i}`] || ""}
+                />
               </>
             ))}
             <button
