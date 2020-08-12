@@ -1,6 +1,7 @@
 /** @jsx jsx */
 import { css, Global, jsx } from "@filbert-js/core";
 import { Fragment } from "preact";
+import FullPageSpinner from './FullPageSpinner'
 
 const Layout = ({ children, goHome, currentState }) => {
   return (
@@ -87,7 +88,7 @@ const Layout = ({ children, goHome, currentState }) => {
           Calculadora CAFCI
         </h5>
       </header>
-      <main>{children}</main>
+      <main>{currentState === "loadingRendimiento" ? <FullPageSpinner />: children}</main>
       <footer
         css={css`
           padding: 1rem 2rem;

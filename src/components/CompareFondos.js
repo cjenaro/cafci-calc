@@ -30,30 +30,26 @@ const CompareFondos = ({ rendimientos, fondos }) => {
     fetchTypes().then(shapeTypes);
   }, []);
 
+  const toCSV = (element, selector) => {
+    const rows = element.querySelectorAll("tr");
+    return Array.from(rows)
+      .map((row) =>
+        Array.from(row.querySelectorAll(selector))
+          .map((cell) => cell.innerText)
+          .join(", ")
+      )
+      .join("\n");
+  };
+
   const handleExport = () => {
     const head = tableRef.current.querySelector("thead");
-    const headRows = Array.from(head.querySelectorAll("tr"));
-    const headCSV = headRows
-      .map((row) =>
-        Array.from(row.querySelectorAll("th"))
-          .map((cell) => cell.innerText)
-          .join(", ")
-      )
-      .join("\n");
     const body = tableRef.current.querySelector("tbody");
-    const bodyRows = Array.from(body.querySelectorAll("tr"));
-    const bodyCSV = bodyRows
-      .map((row) =>
-        Array.from(row.querySelectorAll("td"))
-          .map((cell) => cell.innerText)
-          .join(", ")
-      )
-      .join("\n");
-
-    const href = `data:application/vnd.ms-excel, ${headCSV}\n${bodyCSV}`;
+    const headCSV = toCSV(head, "th");
+    const bodyCSV = toCSV(body, "td");
+    const href = `data:text/csv;charset=utf-8, ${headCSV}\n${bodyCSV}`;
     const a = document.createElement("a");
     a.href = href;
-    a.download = "CAFCICALC.csv";
+    a.download = "cafci_calc.csv";
     a.click();
   };
 

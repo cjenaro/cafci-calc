@@ -143,7 +143,7 @@ const SearchFondo = ({ selectFondo }) => {
         <label htmlFor="fondo">Nombre:</label>
         <input type="text" autocomplete={false} name="fondo" id="fondo" />
         <button disabled={state === "loading"} type="submit">
-          Buscar
+                {state === "loading" ? "Cargando..." : "Buscar"}
         </button>
       </form>
       <ul

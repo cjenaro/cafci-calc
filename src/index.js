@@ -119,8 +119,6 @@ const App = () => {
 
   const goHome = () => send("resume");
 
-  console.log(state);
-
   return (
     <>
       <Layout currentState={state} goHome={goHome}>
