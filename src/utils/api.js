@@ -31,3 +31,9 @@ export async function fetchDetailedFondo({ idFondo, idClase }) {
     .then((blob) => blob.json())
     .catch((err) => console.error(err));
 }
+
+export async function fetchTypes() {
+  return await fetch(`${ENDPOINT_BASE}/tipo-renta?limit=0`)
+    .then((blob) => blob.json())
+    .catch((err) => console.error(err));
+}

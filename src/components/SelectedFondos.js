@@ -57,12 +57,12 @@ const SelectedFondos = ({ fondos = [], removeFondo, compareFondos }) => {
     const { name, value } = e.target;
     let newValue = value.replace(/[^\d]/g, "");
     let parsedValue = "";
-    parsedValue = `${newValue.slice(0, 2)}`;
-    if (newValue.length > 2) {
-      parsedValue += `-${newValue.slice(2, 4)}`;
-    }
+    parsedValue = `${newValue.slice(0, 4)}`;
     if (newValue.length > 4) {
-      parsedValue += `-${newValue.slice(4, 8)}`;
+      parsedValue += `-${newValue.slice(4, 6)}`;
+    }
+    if (newValue.length > 6) {
+      parsedValue += `-${newValue.slice(6, 8)}`;
     }
     setSelectedDates({
       ...selectedDates,
@@ -160,7 +160,7 @@ const SelectedFondos = ({ fondos = [], removeFondo, compareFondos }) => {
             {Array.from({ length: periods }).map((_, i) => (
               <>
                 <input
-                  placeholder="DD-MM-AAAA"
+                  placeholder="AAAA-MM-DD"
                   aria-labelledby="desde"
                   id={`date_from_${i}`}
                   name={`from_${i}`}
@@ -169,7 +169,7 @@ const SelectedFondos = ({ fondos = [], removeFondo, compareFondos }) => {
                   value={selectedDates[`from_${i}`] || ""}
                 />
                 <input
-                  placeholder="DD-MM-AAAA"
+                  placeholder="AAAA-MM-DD"
                   aria-labelledby="hasta"
                   id={`date_to_${i}`}
                   name={`to_${i}`}
