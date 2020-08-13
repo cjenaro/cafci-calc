@@ -58,7 +58,7 @@ const CompareFondos = ({ rendimientos, fondos }) => {
       <div
         css={css`
           width: 100%;
-          overflow: scroll;
+          overflow-x: scroll;
           @media (max-width: 430px) {
             box-shadow: inset -9px 0 9px -9px rgba(0, 0, 0, 0.4);
           }
@@ -124,7 +124,7 @@ const CompareFondos = ({ rendimientos, fondos }) => {
                     const rendimiento = rendimientos[key][fondo.id];
                     return (
                       <td>
-                        {rendimiento && Math.floor(Number(rendimiento.tna))}%
+                        {rendimiento && Number(rendimiento.tna).toFixed(2)}%
                       </td>
                     );
                   })}
@@ -139,22 +139,22 @@ const CompareFondos = ({ rendimientos, fondos }) => {
             </tbody>
           </table>
         )}
-        <button
-          onClick={handleExport}
-          css={css`
-            padding: 0.5rem 1rem;
-            background-color: var(--theme-green--darkest);
-            color: #ffffff;
-            border: 0;
-            text-transform: uppercase;
-            letter-spacing: 0.25rem;
-            font-weight: bold;
-            margin-top: 1rem;
-          `}
-        >
-          Exportar a un CSV (Compatible con excel)
-        </button>
       </div>
+      <button
+        onClick={handleExport}
+        css={css`
+          padding: 0.5rem 1rem;
+          background-color: var(--theme-green--darkest);
+          color: #ffffff;
+          border: 0;
+          text-transform: uppercase;
+          letter-spacing: 0.25rem;
+          font-weight: bold;
+          margin-top: 1rem;
+        `}
+      >
+        Exportar a un CSV (Compatible con excel)
+      </button>
     </div>
   );
 };
