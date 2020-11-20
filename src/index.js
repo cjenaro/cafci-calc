@@ -134,6 +134,7 @@ const App = () => {
               compareFondos={compareFondos}
               removeFondo={removeFondo}
               fondos={selectedFondos}
+              selectFondo={selectFondo}
             />
             <SearchFondo selectFondo={selectFondo} />
           </>

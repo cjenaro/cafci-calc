@@ -1,11 +1,10 @@
 /** @jsx jsx */
 import { css, jsx, keyframes } from "@filbert-js/core";
 import { Fragment } from "preact";
-import { useState } from "preact/hooks";
-import { createMachine, reduce, state, transition } from "robot3";
+import { useEffect, useState } from "preact/hooks";
+import { createMachine, invoke, reduce, state, transition } from "robot3";
 import { useMachine } from "preact-robot";
 import MinusButton from "./MinusButton";
-import DropdownButton from "./DropdownButton";
 
 const wiggle = keyframes`
   50% {
@@ -13,17 +12,29 @@ const wiggle = keyframes`
   }
 `;
 
-const context = () => ({});
+const context = () => ({
+  isOpen: false,
+});
+
+function setBodyStyle(ctx) {
+  document.body.style.overflow = !ctx.isOpen ? "hidden" : "auto";
+  return { ...ctx, isOpen: !ctx.isOpen };
+}
 
 const machine = createMachine(
   {
-    closed: state(transition("toggle", "open")),
-    open: state(transition("toggle", "closed")),
+    closed: state(transition("toggle", "open", reduce(setBodyStyle))),
+    open: state(transition("toggle", "closed", reduce(setBodyStyle))),
   },
   context
 );
 
-const SelectedFondos = ({ fondos = [], removeFondo, compareFondos }) => {
+const SelectedFondos = ({
+  fondos = [],
+  removeFondo,
+  compareFondos,
+  selectFondo,
+}) => {
   const [current, send] = useMachine(machine);
   const [periods, setPeriods] = useState(1);
   const [selectedDates, setSelectedDates] = useState({});
@@ -51,6 +62,18 @@ const SelectedFondos = ({ fondos = [], removeFondo, compareFondos }) => {
     if (periods > 0) {
       setPeriods(periods - 1);
     }
+  };
+
+  const saveFondos = () => {
+    window.localStorage.setItem("savedFondos", JSON.stringify(fondos));
+  };
+
+  const loadFondos = () => {
+    const fondosString = window.localStorage.getItem("savedFondos") || "";
+    const loaded = JSON.parse(fondosString);
+    loaded.forEach((element) => {
+      selectFondo(element);
+    });
   };
 
   const mask = (e) => {
@@ -104,7 +127,7 @@ const SelectedFondos = ({ fondos = [], removeFondo, compareFondos }) => {
           grid-template-rows: 1fr 1fr auto;
           width: 100%;
           height: 100%;
-          overflow: scroll;
+          overflow: auto;
           position: fixed;
           top: 0;
           transform: translateX(${closed ? "100%" : "0"});
@@ -222,6 +245,36 @@ const SelectedFondos = ({ fondos = [], removeFondo, compareFondos }) => {
               type="submit"
             >
               Comparar
+            </button>
+            <button
+              css={css`
+                border: 1px solid transparent;
+                background-color: #ffffff;
+                padding: 0.5em 1em;
+                text-transform: uppercase;
+                letter-spacing: 0.3px;
+                font-size: 1em;
+                color: #222222;
+              `}
+              type="button"
+              onClick={saveFondos}
+            >
+              Guardar
+            </button>
+            <button
+              css={css`
+                border: 1px solid #ffffff;
+                background-color: transparent;
+                padding: 0.5em 1em;
+                text-transform: uppercase;
+                letter-spacing: 0.3px;
+                font-size: 1em;
+                color: #ffffff;
+              `}
+              type="button"
+              onClick={loadFondos}
+            >
+              Cargar
             </button>
           </form>
         </div>
