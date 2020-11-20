@@ -4,7 +4,7 @@ import { css, jsx } from "@filbert-js/core";
 const MinusButton = ({ onClick }) => {
   return (
     <button
-      aria-label="Add"
+      aria-label="Remove"
       onClick={onClick}
       css={css`
         width: 50px;
