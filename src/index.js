@@ -82,12 +82,17 @@ async function fetchAllRendimientos(ctx, { data }) {
   return Promise.all(promises);
 }
 
+function setScroll(ctx) {
+  document.body.style.overflow = "auto";
+  return ctx;
+}
+
 const machine = createMachine(
   {
     idle: state(
       transition("select", "input", reduce(addFondo)),
       transition("remove", "input", reduce(removeFondoById)),
-      transition("select-date", "loadingRendimiento"),
+      transition("select-date", "loadingRendimiento", reduce(setScroll)),
       transition("compare", "comparing")
     ),
     input: state(immediate("idle")),
